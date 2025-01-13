@@ -2,7 +2,7 @@
 //  BudgetCategory+CoreDataClass.swift
 //  BudgetApp
 //
-//  Created by Rezaul Karim on 13/1/25.
+//  Created by Rezaul Karim on 14/1/25.
 //
 
 import Foundation

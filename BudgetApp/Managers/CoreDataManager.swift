@@ -10,7 +10,7 @@ import CoreData
 
 class CoreDataManager {
     static let shared = CoreDataManager()
-    private var persistentContainer = NSPersistentContainer()
+    private var persistentContainer : NSPersistentContainer
     
     private init() {
         persistentContainer = NSPersistentContainer(name: "BudgetModel")
