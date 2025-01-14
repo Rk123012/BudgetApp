@@ -11,7 +11,8 @@ extension NumberFormatter{
     static var currency : NumberFormatter{
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
-//        formatter.locale = Locale(identifier: "us")
+        formatter.locale = Locale(identifier: "en_US")
+        formatter.currencySymbol = Locale(identifier: "en_US").currencySymbol
         return formatter
     }
 }
