@@ -17,6 +17,15 @@ struct ContentView: View {
         budgetCategoryResults.reduce(0) { $0 + $1.total }
     }
     
+    private func delete(category : BudgetCategory){
+        viewContext.delete(category)
+        do{
+            try viewContext.save()
+        }catch let error{
+            print(error.localizedDescription)
+        }
+    }
+    
     var body: some View {
         NavigationStack{
             
@@ -25,7 +34,9 @@ struct ContentView: View {
                 Text(total as NSNumber, formatter: NumberFormatter.currency)
                     .fontWeight(.bold)
                 
-                BudgetListView(budgetCategoryResuls: budgetCategoryResults)
+                BudgetListView(budgetCategoryResuls: budgetCategoryResults, onDeleteBudgetCategory: { category in
+                    self.delete(category: category)
+                })
             }
             .sheet(isPresented: $isPresented, content: {
                 AddBudgetCategoryView()
@@ -45,4 +56,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .environment(\.managedObjectContext, CoreDataManager.shared.viewContext)
 }

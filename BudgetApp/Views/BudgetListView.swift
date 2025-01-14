@@ -10,7 +10,7 @@ import SwiftUI
 struct BudgetListView: View {
     
     let budgetCategoryResuls : FetchedResults<BudgetCategory>
-    
+    let onDeleteBudgetCategory : (BudgetCategory) -> Void
     var body: some View {
         List{
             if budgetCategoryResuls.isEmpty{
@@ -26,6 +26,10 @@ struct BudgetListView: View {
                         }
                     }
                     
+                }.onDelete { indexSet in
+                    indexSet.map{budgetCategoryResuls[$0]}.forEach { it in
+                        onDeleteBudgetCategory(it)
+                    }
                 }
             }
         }
