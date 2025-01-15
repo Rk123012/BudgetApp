@@ -17,6 +17,16 @@ struct TransactionListView: View {
         _transactions = FetchRequest(fetchRequest: request)
     }
     
+    private func deleteTransaction(transaction : Transaction){
+        do{
+            viewContext.delete(transaction)
+            try viewContext.save()
+        }catch{
+            print(error)
+        }
+        
+    }
+    
     var body: some View {
         if transactions.isEmpty {
             Text("No transactions found")
@@ -27,6 +37,10 @@ struct TransactionListView: View {
                         Text(transaction.title ?? "")
                         Spacer()
                         Text(transaction.total as NSNumber, formatter: NumberFormatter.currency)
+                    }
+                }.onDelete { indexSet in
+                    indexSet.forEach { index in
+                        self.deleteTransaction(transaction: transactions[index])
                     }
                 }
             }
