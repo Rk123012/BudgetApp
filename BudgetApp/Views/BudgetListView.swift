@@ -11,6 +11,8 @@ struct BudgetListView: View {
     
     let budgetCategoryResuls : FetchedResults<BudgetCategory>
     let onDeleteBudgetCategory : (BudgetCategory) -> Void
+    let onEditBudgetCategory : (BudgetCategory) -> Void
+    
     var body: some View {
         List{
             if budgetCategoryResuls.isEmpty{
@@ -30,6 +32,11 @@ struct BudgetListView: View {
                                     .foregroundColor(budgetCategory.overSpent ? .red : .green)
                             }
                         }
+                        .onLongPressGesture {
+                            onEditBudgetCategory(budgetCategory)
+                        }
+                        .contentShape(Rectangle())
+                            
                         
                     }
                     

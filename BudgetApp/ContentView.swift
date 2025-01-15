@@ -7,11 +7,29 @@
 
 import SwiftUI
 
+
+enum SheetAction: Identifiable {
+    
+    case add
+    case edit(BudgetCategory)
+    
+    var id: Int {
+        switch self {
+            case .add:
+                return 1
+            case .edit(_):
+                return 2
+        }
+    }
+    
+}
+
 struct ContentView: View {
     
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(sortDescriptors: []) private var budgetCategoryResults: FetchedResults<BudgetCategory>
-    @State private var isPresented : Bool = false
+    @State private var sheetAction: SheetAction?
+
     
     var total : Double {
         budgetCategoryResults.reduce(0) { $0 + $1.total }
@@ -26,6 +44,10 @@ struct ContentView: View {
         }
     }
     
+    private func editBudgetCategory(_ category : BudgetCategory){
+        sheetAction = .edit(category)
+    }
+    
     var body: some View {
         NavigationStack{
             
@@ -36,15 +58,20 @@ struct ContentView: View {
                 
                 BudgetListView(budgetCategoryResuls: budgetCategoryResults, onDeleteBudgetCategory: { category in
                     self.delete(category: category)
-                })
+                }, onEditBudgetCategory: editBudgetCategory)
             }
-            .sheet(isPresented: $isPresented, content: {
-                AddBudgetCategoryView()
+            .sheet(item: $sheetAction, content: { sheetAction in
+                switch sheetAction {
+                case .add:
+                    AddOrUpdateBudgetCategoryView(previousBudgetCategory: nil)
+                case .edit(let budgetCategory):
+                    AddOrUpdateBudgetCategoryView(previousBudgetCategory: budgetCategory)
+                }
             })
             .toolbar{
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Add Category"){
-                        isPresented = true
+                        sheetAction = .add
                     }
                 }
             }

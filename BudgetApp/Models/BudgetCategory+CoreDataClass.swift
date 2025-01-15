@@ -39,4 +39,12 @@ class BudgetCategory: NSManagedObject {
         request.predicate = NSPredicate(format: "category == %@", budgetCategory)
         return request
     }
+    
+    static func byId(_ id:NSManagedObjectID) -> BudgetCategory{
+        let vc = CoreDataManager.shared.viewContext
+        guard let budgetCategory = vc.object(with: id) as? BudgetCategory else {
+            fatalError("Id not found")
+        }
+        return budgetCategory
+    }
 }
