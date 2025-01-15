@@ -22,8 +22,12 @@ struct BudgetListView: View {
                             Text(budgetCategory.title ?? "" )
                             Spacer()
                             
-                            VStack{
+                            VStack(alignment: .trailing, spacing: 10){
                                 Text(budgetCategory.total as NSNumber, formatter: NumberFormatter.currency)
+                                Text("\(budgetCategory.overSpent ? "overSpent" : "Remaining") \(Text(budgetCategory.remainingBudgeTotal as NSNumber, formatter: NumberFormatter.currency))")
+                                    .frame(maxWidth: .infinity, alignment: .trailing)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(budgetCategory.overSpent ? .red : .green)
                             }
                         }
                         
@@ -35,7 +39,9 @@ struct BudgetListView: View {
                     }
                 }
             }
-        }.navigationDestination(for: BudgetCategory.self) { budgerCategory in
+        }
+        .listStyle(.plain)
+        .navigationDestination(for: BudgetCategory.self) { budgerCategory in
             BudgetDetailView(budgetCategory: budgerCategory)
         }
     }
